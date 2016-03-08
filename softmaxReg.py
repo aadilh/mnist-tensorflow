@@ -1,7 +1,7 @@
 import input_data
 import tensorflow as tf
 
-tf.app.flags.DEFINE_string("log_dir","softmax_logs","Directory for saving the summaries")
+tf.app.flags.DEFINE_string("log_dir","basic_softmax_logs","Directory for saving the summaries")
 tf.app.flags.DEFINE_integer("max_it",1000,"Number of iterations to run")
 tf.app.flags.DEFINE_integer("batch",100,"Batch size")
 FLAGS = tf.app.flags.FLAGS
@@ -92,6 +92,12 @@ for i in range(FLAGS.max_it):
 
     # Running the session of the graph for Gradient Descent Optimization with data points fetched above
       sess.run(train_step, feed_dict=feed)
+
+
+weights = tf.unpack(tf.transpose(W))
+for i in range(0,10):
+  w = tf.reshape(weights[i],(-1,28,28,1))
+  writer.add_summary(sess.run(tf.image_summary("weight_"+str(i),w,max_images=1)))
 
 print "=========================================================="
 print "Final Evaluation"
